@@ -403,6 +403,7 @@ public class StmtExecutor {
 
             if (parsedStmt instanceof QueryStatement) {
                 if (isNotVariableSelect()) {
+                    context.getState().setRequestType(QueryState.RequestType.SELECT);
                     context.getState().setIsQuery(true);
                 }
 
@@ -457,6 +458,7 @@ public class StmtExecutor {
                     }
                 }
             } else if (parsedStmt instanceof SetStmt) {
+                context.getState().setRequestType(QueryState.RequestType.SET);
                 handleSetStmt();
             } else if (parsedStmt instanceof UseDbStmt) {
                 handleUseDbStmt();
@@ -1216,6 +1218,7 @@ public class StmtExecutor {
 
         if (parsedStmt instanceof InsertStmt && ((InsertStmt) parsedStmt).isOverwrite()
                 && !((InsertStmt) parsedStmt).hasOverwriteJob()) {
+            context.getState().setRequestType(QueryState.RequestType.INSERT);
             handleInsertOverwrite((InsertStmt) parsedStmt);
             return;
         }
@@ -1226,11 +1229,14 @@ public class StmtExecutor {
 
         String label = DebugUtil.printId(context.getExecutionId());
         if (stmt instanceof InsertStmt) {
+            context.getState().setRequestType(QueryState.RequestType.INSERT);
             String stmtLabel = ((InsertStmt) stmt).getLabel();
             label = Strings.isNullOrEmpty(stmtLabel) ? "insert_" + label : stmtLabel;
         } else if (stmt instanceof UpdateStmt) {
+            context.getState().setRequestType(QueryState.RequestType.UPDATE);
             label = "update_" + label;
         } else if (stmt instanceof DeleteStmt) {
+            context.getState().setRequestType(QueryState.RequestType.DELETE);
             label = "delete_" + label;
         } else {
             throw unsupportedException(
