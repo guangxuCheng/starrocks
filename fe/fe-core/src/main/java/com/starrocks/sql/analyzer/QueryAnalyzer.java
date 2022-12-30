@@ -293,7 +293,7 @@ public class QueryAnalyzer {
 
             node.setColumns(columns.build());
             String dbName = node.getName().getDb();
-
+            session.getDumpInfo().addCatalog(node.getName().getCatalog());
             session.getDumpInfo().addTable(dbName, table);
             if (table.isHiveTable()) {
                 HiveTable hiveTable = (HiveTable) table;
