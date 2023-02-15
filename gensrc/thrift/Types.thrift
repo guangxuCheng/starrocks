@@ -457,6 +457,7 @@ enum TCompressionType {
     DEFLATE = 9;
     BZIP2 = 10;
     LZO = 11; // Deprecated
+    BROTLI = 12;
 }
 
 enum TWriteQuorumType {
